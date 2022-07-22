@@ -1,6 +1,8 @@
+import Pokemons from '../Pokemons';
 import { GlobalStyle } from '../../assets/styles/global';
-import pokemonLogo from '../../assets/images/logo.svg';
 import { Container } from './styles';
+
+import pokemonLogo from '../../assets/images/logo.svg';
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
         <header>
           <img src={pokemonLogo} alt="Logo pokemon" />
         </header>
+
+        <Pokemons />
       </Container>
     </>
 

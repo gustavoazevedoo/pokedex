@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import Pokemon from '../../components/Pokemon';
 import PokemonsService from '../../services/PokemonsService';
-import { Container, PokemonsList, LoadMoreContainer } from './styles';
+import { PokemonsList, LoadMoreContainer } from './styles';
 
 export default function Pokemons() {
   const [pokemons, setPokemons] = useState([]);
   const [offset, setOffset] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -12,7 +14,10 @@ export default function Pokemons() {
       try {
         setIsLoading(true);
 
-        const { results } = await PokemonsService.getPokemons(offset);
+        const { results, next } = await PokemonsService.getPokemons(offset);
+        if (!next) {
+          setHasNextPage(false);
+        }
         const pokemonsList = await PokemonsService.listPokemons(results);
         setPokemons((prevState) => [...prevState, ...pokemonsList]);
       } catch (error) {
@@ -26,32 +31,22 @@ export default function Pokemons() {
   }, [offset]);
 
   function handleLoadMore() {
-    setOffset((prevState) => prevState + 12);
+    if (hasNextPage) {
+      setOffset((prevState) => prevState + 12);
+    }
   }
 
   return (
-    <Container>
+    <>
       <PokemonsList>
         {pokemons.map((pokemon) => (
-          <div key={pokemon.id}>
-            <figure>
-              <a href="https://localhost:3000">
-                <img src={pokemon.sprites?.other['official-artwork'].front_default} alt={pokemon.name} />
-              </a>
-            </figure>
-
-            <div className="infos">
-              <span>{`#${String(pokemon.id).padStart(3, '0')}`}</span>
-
-              <strong>{pokemon.name}</strong>
-
-              <div>
-                {pokemon.types.map(({ type }) => (
-                  <span key={type.name} className={type.name}>{type.name}</span>
-                ))}
-              </div>
-            </div>
-          </div>
+          <Pokemon
+            key={pokemon.id}
+            id={pokemon.id}
+            image={pokemon.sprites?.other['official-artwork'].front_default}
+            name={pokemon.name}
+            types={pokemon.types}
+          />
         ))}
       </PokemonsList>
 
@@ -61,9 +56,9 @@ export default function Pokemons() {
           onClick={handleLoadMore}
           disabled={isLoading}
         >
-          Load more
+          {isLoading ? 'Loading...' : 'Load more'}
         </button>
       </LoadMoreContainer>
-    </Container>
+    </>
   );
 }

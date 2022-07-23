@@ -4,7 +4,6 @@ export const PokemonsList = styled.main`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 2rem 1rem;
-
 `;
 
 export const LoadMoreContainer = styled.div`

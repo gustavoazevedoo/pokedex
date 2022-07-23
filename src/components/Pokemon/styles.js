@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   figure {
-    background: #F2F2F2;
+    background: var(--gray-100);
     border-radius: 5px;
     position: relative;
     display: block;
@@ -37,7 +37,6 @@ export const Container = styled.div`
       margin-top: 0.5rem;
       display: flex;
       gap: 5px;
-
     }
   }
 `;

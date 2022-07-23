@@ -8,6 +8,7 @@ export const Types = styled.span`
   text-transform: capitalize;
   border-radius: 4px;
   font-size: 0.875rem;
+  line-height: 2;
 
   &.grass {
     background: #9bcc50;

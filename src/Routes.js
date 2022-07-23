@@ -7,7 +7,7 @@ export default function Routes() {
     <Switch>
       <Redirect exact from="/" to="/pokemons" />
       <Route path="/pokemons" exact component={Pokemons} />
-      <Route path="/pokemons/:name" component={PokemonDetails} />
+      <Route path="/pokemons/:pokemonName" component={PokemonDetails} />
     </Switch>
   );
 }

@@ -1,5 +1,6 @@
+import { ArrowLeft } from 'phosphor-react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import PokemonTypes from '../../components/Pokemon/PokemonTypes';
 
@@ -44,6 +45,10 @@ export default function PokemonDetails() {
 
   return (
     <Container>
+      <Link to="/pokemons" title="Go back to page pokemons">
+        <ArrowLeft weight="bold" size={18} />
+        Back
+      </Link>
       <h1>
         {pokemon?.name}
         {' '}

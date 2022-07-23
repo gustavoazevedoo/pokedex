@@ -1,9 +1,19 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  a {
+    display: inline-flex;
+    align-items: center;
+    /* justify-content: center; */
+    gap: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    color: var(--white  );
+    background-color: var(--gray-600);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
 
   h1 {
     font-size: 2.25rem;
@@ -11,6 +21,7 @@ export const Container = styled.div`
     font-weight: normal;
     text-transform: capitalize;
     margin-bottom: 1.5rem;
+    text-align: center;
 
     & > span {
       color: var(--gray-400);

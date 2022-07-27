@@ -2,6 +2,8 @@ import { ArrowLeft } from 'phosphor-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import unknownPokemon from '../../assets/images/unknown-pokemon.png';
+
 import PokemonTypes from '../../components/Pokemon/PokemonTypes';
 
 import PokemonsService from '../../services/PokemonsService';
@@ -16,13 +18,7 @@ import {
 export default function PokemonDetails() {
   const { pokemonName } = useParams();
   const [pokemon, setPokemon] = useState();
-
-  useEffect(() => {
-    (async () => {
-      const pokemonDetails = await PokemonsService.getPokemonDetails(pokemonName);
-      setPokemon(pokemonDetails);
-    })();
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   function getDescription(descriptions) {
     const englishText = descriptions?.find((description) => description.language.name === 'en');
@@ -36,12 +32,40 @@ export default function PokemonDetails() {
     return cleanedCategory;
   }
 
-  const formatedId = `#${String(pokemon?.id)?.padStart(3, '0')}`;
-  const officialArtwork = pokemon?.sprites?.other['official-artwork'].front_default;
-  const description = getDescription(pokemon?.flavor_text_entries);
-  const weight = convertHectogramsToPounds(pokemon?.weight);
-  const height = convertDecimeterToFeetAndInch(pokemon?.height);
-  const category = getCategory(pokemon?.genera);
+  useEffect(() => {
+    async function loadPokemonDetails() {
+      try {
+        setIsLoading(true);
+        const pokemonDetails = await PokemonsService.getPokemonDetails(pokemonName);
+
+        const formatedPokemon = {
+          id: `#${String(pokemonDetails?.id)?.padStart(3, '0')}`,
+          name: pokemonDetails.name,
+          officialArtwork: pokemonDetails?.sprites?.other['official-artwork'].front_default,
+          description: getDescription(pokemonDetails?.flavor_text_entries),
+          weight: convertHectogramsToPounds(pokemonDetails?.weight),
+          ability: pokemonDetails.abilities?.[0].ability.name,
+          height: convertDecimeterToFeetAndInch(pokemonDetails?.height),
+          category: getCategory(pokemonDetails?.genera) || '???',
+          types: pokemonDetails.types,
+        };
+
+        setPokemon(formatedPokemon);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadPokemonDetails();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <h1>Loading...</h1>
+    );
+  }
 
   return (
     <Container>
@@ -52,31 +76,31 @@ export default function PokemonDetails() {
       <h1>
         {pokemon?.name}
         {' '}
-        <span>{formatedId}</span>
+        <span>{pokemon?.id}</span>
       </h1>
 
       <div>
         <figure>
-          <img src={officialArtwork} alt={pokemon?.name} />
+          <img src={pokemon?.officialArtwork || unknownPokemon} alt={pokemon?.name} />
         </figure>
         <Infos>
-          <p>{description}</p>
+          <p>{pokemon?.description}</p>
 
           <StatsContainer>
             <Stat>
               <small>Height</small>
-              <strong>{height}</strong>
+              <strong>{pokemon?.height}</strong>
             </Stat>
 
             <Stat>
               <small>Category</small>
-              <strong>{category}</strong>
+              <strong>{pokemon?.category}</strong>
             </Stat>
 
             <Stat>
               <small>Weight</small>
               <strong>
-                {weight}
+                {pokemon?.weight}
                 {' '}
                 lbs
               </strong>
@@ -84,18 +108,20 @@ export default function PokemonDetails() {
 
             <Stat>
               <small>Abilities</small>
-              <strong>{pokemon?.abilities?.[0].ability.name}</strong>
+              <strong>{pokemon?.ability || '???'}</strong>
             </Stat>
           </StatsContainer>
 
-          <TypesContainer>
-            <strong>Type</strong>
-            <div>
-              {pokemon?.types?.map(({ type }) => (
-                <PokemonTypes key={type.name} name={type.name} />
-              ))}
-            </div>
-          </TypesContainer>
+          {pokemon?.types && (
+            <TypesContainer>
+              <strong>Type</strong>
+              <div>
+                {pokemon.types.map(({ type }) => (
+                  <PokemonTypes key={type.name} name={type.name} />
+                ))}
+              </div>
+            </TypesContainer>
+          )}
         </Infos>
       </div>
     </Container>

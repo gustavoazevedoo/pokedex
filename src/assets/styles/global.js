@@ -34,12 +34,12 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: #fff;
-    color: #313131;
+    background: var(--white);
+    color: var(--gray-600);
     -webkit-font-smoothing: antialiased;
   }
 
-  body, input, textarea, button {
+  body, input, select, textarea, button {
     font-family: 'IBM Plex Sans Thai Looped', sans-serif;
     font-weight: 400;
     font-size: 1rem;

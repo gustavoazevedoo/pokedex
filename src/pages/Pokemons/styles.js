@@ -1,4 +1,23 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export const FilterContainer = styled.div`
+  margin-bottom: 2rem;
+
+  > select {
+    padding: 0.5rem 1rem;
+    background: var(--gray-600);
+    border-radius: 5px;
+    color: var(--white);
+    text-transform: capitalize;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    > select {
+      width: 50%;
+    }
+  }
+`;
 
 export const PokemonsList = styled.main`
   display: grid;
@@ -7,6 +26,10 @@ export const PokemonsList = styled.main`
 `;
 
 export const LoadMoreContainer = styled.div`
+  ${({ visible }) => !visible && css`
+    display: none !important;
+  `}
+
   margin-top: 5rem;
   display: flex;
   align-items: center;

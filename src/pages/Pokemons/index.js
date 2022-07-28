@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+
 import Pokemon from '../../components/Pokemon';
+import Loader from '../../components/Loader';
+
 import PokemonsService from '../../services/PokemonsService';
 import { PokemonsList, LoadMoreContainer, FilterContainer } from './styles';
+
 import unknownPokemon from '../../assets/images/unknown-pokemon.png';
 
 export default function Pokemons() {
@@ -91,6 +95,8 @@ export default function Pokemons() {
 
   return (
     <>
+      <Loader isLoading={isLoadingPokemonsPerType} />
+
       <FilterContainer>
         <select onChange={handleTypeFilterChange}>
           <option value="default" hidden>
@@ -103,20 +109,17 @@ export default function Pokemons() {
         </select>
       </FilterContainer>
 
-      {isLoadingPokemonsPerType && <h1>Loading..........</h1>}
-      {!isLoadingPokemonsPerType && (
-        <PokemonsList>
-          {pokemons.map((pokemon) => (
-            <Pokemon
-              key={pokemon.id}
-              id={pokemon.id}
-              image={pokemon.sprites?.other['official-artwork'].front_default || unknownPokemon}
-              name={pokemon.name}
-              types={pokemon.types}
-            />
-          ))}
-        </PokemonsList>
-      )}
+      <PokemonsList>
+        {pokemons.map((pokemon) => (
+          <Pokemon
+            key={pokemon.id}
+            id={pokemon.id}
+            image={pokemon.sprites?.other['official-artwork'].front_default || unknownPokemon}
+            name={pokemon.name}
+            types={pokemon.types}
+          />
+        ))}
+      </PokemonsList>
       <LoadMoreContainer visible={isLoadMoreVisible}>
         <button
           type="button"

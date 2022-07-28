@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import unknownPokemon from '../../assets/images/unknown-pokemon.png';
+import Loader from '../../components/Loader';
 
 import PokemonTypes from '../../components/Pokemon/PokemonTypes';
 
@@ -61,14 +62,10 @@ export default function PokemonDetails() {
     loadPokemonDetails();
   }, []);
 
-  if (isLoading) {
-    return (
-      <h1>Loading...</h1>
-    );
-  }
-
   return (
     <Container>
+      <Loader isLoading={isLoading} />
+
       <Link to="/pokemons" title="Go back to page pokemons">
         <ArrowLeft weight="bold" size={18} />
         Back

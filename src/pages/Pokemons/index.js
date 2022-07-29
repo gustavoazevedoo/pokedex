@@ -120,11 +120,12 @@ export default function Pokemons() {
           />
         ))}
       </PokemonsList>
-      <LoadMoreContainer visible={isLoadMoreVisible}>
+
+      <LoadMoreContainer visible={isLoadMoreVisible && hasNextPage}>
         <button
           type="button"
           onClick={handleLoadMore}
-          disabled={isLoading || isLoadingPokemonsPerType}
+          disabled={isLoading}
         >
           {isLoading ? 'Loading...' : 'Load more'}
         </button>
